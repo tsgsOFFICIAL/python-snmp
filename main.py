@@ -30,6 +30,17 @@ def get(target, oids, credentials, engine=engine, context=context, port=161):
 
     return fetch(handler, 1)[0]
 
+def set(target, value_pairs, credentials, port=161, engine=hlapi.SnmpEngine(), context=hlapi.ContextData()):
+    handler = hlapi.setCmd(
+        engine,
+        credentials,
+        hlapi.UdpTransportTarget((target, port)),
+        context,
+        *construct_value_pairs(value_pairs)
+    )
+
+    return fetch(handler, 1)[0]
+
 def construct_object_types(list_of_oids):
     object_types = []
 
@@ -37,6 +48,13 @@ def construct_object_types(list_of_oids):
         object_types.append(hlapi.ObjectType(hlapi.ObjectIdentity(oid)))
         
     return object_types
+
+def construct_value_pairs(list_of_pairs):
+    pairs = []
+    for key, value in list_of_pairs.items():
+        pairs.append(hlapi.ObjectType(hlapi.ObjectIdentity(key), value))
+
+    return pairs
 
 def fetch(handler, count):
     result = []
@@ -71,6 +89,8 @@ def cast(value):
                 pass
             
     return value
+
+# set(target, {'1.3.6.1.2.1.1.5.0': 'S1'}, credentials)
 
 target_oid = '1.3.6.1.2.1.2.2.1.10.10001'
 while True:
