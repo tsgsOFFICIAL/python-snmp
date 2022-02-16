@@ -53,3 +53,5 @@ def cast(value):
                 pass
             
     return value
+
+print(get('192.168.0.2', ['1.3.6.1.2.1.1.5.0'], hlapi.CommunityData('GRUPPE1')))
