@@ -72,7 +72,7 @@ def cast(value):
             
     return value
 
-target_oid = '1.3.6.1.2.1.1.5.0'
+target_oid = '1.3.6.1.2.1.2.2.1.10.10001'
 while True:
     # print(get(target, [target_oid], credentials)[target_oid]) # Simple method to do this
 
