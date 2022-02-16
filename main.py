@@ -110,8 +110,6 @@ def cast(value):
             
     return value
 
-# set(target, {'1.3.6.1.2.1.1.5.0': 'S1'}, credentials)
-
 target_oid = '1.3.6.1.2.1.2.2.1.8'
 results = get_bulk(target, [target_oid], credentials, 27)
 
@@ -131,3 +129,5 @@ for result in results:
 #     for key in result:
 #         print(result[key])
 #     time.sleep(1)
+
+# set(target, {'1.3.6.1.2.1.1.5.0': 'S1'}, credentials)
