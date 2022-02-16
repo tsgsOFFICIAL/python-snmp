@@ -99,4 +99,4 @@ while True:
     result = get(target, [target_oid], credentials)
     for key in result:
         print(result[key])
-    time.sleep(5)
+    time.sleep(1)
