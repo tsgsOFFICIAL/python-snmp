@@ -1,5 +1,6 @@
 from pysnmp import hlapi
 import time
+import requests
 
 # Variables
 target = "192.168.0.2"
@@ -19,6 +20,25 @@ class color:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+def get_bulk(target, oids, credentials, count, start_from=0, port=161,
+             engine=engine, context=context):
+    handler = hlapi.bulkCmd(
+        engine,
+        credentials,
+        hlapi.UdpTransportTarget((target, port)),
+        context,
+        start_from, count,
+        *construct_object_types(oids)
+    )
+
+    return fetch(handler, count)
+
+def get_bulk_auto(target, oids, credentials, count_oid, start_from=0, port=161,
+                  engine=engine, context=context):
+    count = get(target, [count_oid], credentials, port, engine, context)[count_oid]
+
+    return get_bulk(target, oids, credentials, count, start_from, port, engine, context)
+
 def get(target, oids, credentials, engine=engine, context=context, port=161):
     handler = hlapi.getCmd(
         engine,
@@ -30,7 +50,7 @@ def get(target, oids, credentials, engine=engine, context=context, port=161):
 
     return fetch(handler, 1)[0]
 
-def set(target, value_pairs, credentials, port=161, engine=hlapi.SnmpEngine(), context=hlapi.ContextData()):
+def set(target, value_pairs, credentials, port=161, engine=engine, context=context):
     handler = hlapi.setCmd(
         engine,
         credentials,
@@ -92,11 +112,22 @@ def cast(value):
 
 # set(target, {'1.3.6.1.2.1.1.5.0': 'S1'}, credentials)
 
-target_oid = '1.3.6.1.2.1.2.2.1.10.10001'
-while True:
-    # print(get(target, [target_oid], credentials)[target_oid]) # Simple method to do this
+target_oid = '1.3.6.1.2.1.2.2.1.8'
+results = get_bulk(target, [target_oid], credentials, 27)
 
-    result = get(target, [target_oid], credentials)
+for result in results:
     for key in result:
-        print(result[key])
-    time.sleep(1)
+        # print(f"Key: {key} - Value: {result[key]}")
+        description_oid = f"{key[:key.rindex('.') - 1]}2{key[key.rindex('.'):len(key)]}"
+        print(f"{color.WARNING}{get(target, [description_oid], credentials)[description_oid]} ({color.OKGREEN + 'UP' if result[key] == 1 else color.FAIL + 'DOWN'}{color.WARNING}){color.ENDC}")
+
+# print ("Both a and b are equal" if a == b else "a is greater than b" if a > b else "b is greater than a")
+
+
+# while True:
+#     # print(get(target, [target_oid], credentials)[target_oid]) # Simple method to do this
+
+#     result = get(target, [target_oid], credentials)
+#     for key in result:
+#         print(result[key])
+#     time.sleep(1)
