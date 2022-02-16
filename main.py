@@ -1,7 +1,12 @@
 from pysnmp import hlapi
 
+# Variables
+target = "192.168.0.2"
+credentials = hlapi.CommunityData('GRUPPE1')
+engine = hlapi.SnmpEngine()
+context = hlapi.ContextData()
 
-def get(target, oids, credentials, port=161, engine=hlapi.SnmpEngine(), context=hlapi.ContextData()):
+def get(target, oids, credentials, engine=engine, context=context, port=161):
     handler = hlapi.getCmd(
         engine,
         credentials,
@@ -54,4 +59,4 @@ def cast(value):
             
     return value
 
-print(get('192.168.0.2', ['1.3.6.1.2.1.1.5.0'], hlapi.CommunityData('GRUPPE1')))
+print(get(target, ['1.3.6.1.2.1.1.5.0'], credentials))
