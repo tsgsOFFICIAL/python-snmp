@@ -74,5 +74,9 @@ def cast(value):
 
 target_oid = '1.3.6.1.2.1.1.5.0'
 while True:
-    print(get(target, [target_oid], credentials)[target_oid])
-    time.sleep(1)
+    # print(get(target, [target_oid], credentials)[target_oid]) # Simple method to do this
+
+    result = get(target, [target_oid], credentials)
+    for key in result:
+        print(result[key])
+    time.sleep(5)
