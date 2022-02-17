@@ -1,8 +1,8 @@
 from pysnmp import hlapi
 import time
 import requests
-import tkinter as tk
 import snmp
+import gui
 
 # Variables
 target = "192.168.0.2"
@@ -20,7 +20,7 @@ class color:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-target_oid = '1.3.6.1.2.1.2.2.1.8'
+target_oid = '1.3.6.1.2.1.2.2.1.8' # Interface status
 results = snmp.get_bulk(target, [target_oid], credentials, 27)
 
 for result in results:
@@ -32,50 +32,6 @@ for result in results:
 
         print(f"{color.WARNING}{name} ({status}{color.WARNING}){color.ENDC}")
 
-window = tk.Tk()
-window.title("Interfaces and their status")
-
-for i in range(len(results)):
-    # print(results[i])
-    button = tk.Button(
-        text="Click me!",
-        bg="blue",
-        fg="yellow"
-        )
-    button.pack(side=tk.LEFT)
-window.mainloop()
-
-# window = tk.Tk()
-# label = tk.Label(
-#     text="Interfaces and their status",
-#     fg="white",
-#     bg="black",
-#     width=175,
-#     height=2
-# )
-# label.pack()
-
-# button = tk.Button(
-#     text="Click me!",
-#     width=25,
-#     height=5,
-#     bg="blue",
-#     fg="yellow"
-# )
-# button.pack(side=tk.LEFT)
-
-
-# window.mainloop()
-
-# print ("Both a and b are equal" if a == b else "a is greater than b" if a > b else "b is greater than a")
-
-
-# while True:
-#     # print(get(target, [target_oid], credentials)[target_oid]) # Simple method to do this
-
-#     result = get(target, [target_oid], credentials)
-#     for key in result:
-#         print(result[key])
-#     time.sleep(1)
+gui.open_gui()
 
 # set(target, {'1.3.6.1.2.1.1.5.0': 'S1'}, credentials)
