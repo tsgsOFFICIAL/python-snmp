@@ -23,6 +23,9 @@ class color:
 target_oid = '1.3.6.1.2.1.2.2.1.8' # Interface status
 results = snmp.get_bulk(target, [target_oid], credentials, 27)
 
+gui_dictionaries = []
+
+# Result is a dictionary, key value pair, with oid as key and status as value
 for result in results:
     for key in result:
         # print(f"Key: {key} - Value: {result[key]}")
@@ -30,8 +33,28 @@ for result in results:
         name = snmp.get(target, [description_oid], credentials)[description_oid]
         status = f"{color.OKGREEN + 'UP' if result[key] == 1 else color.FAIL + 'DOWN'}"
 
-        print(f"{color.WARNING}{name} ({status}{color.WARNING}){color.ENDC}")
+        dictionary = {
+            "status_oid": key,
+            "name": name,
+            "status": result[key]
+        }
 
-gui.open_gui()
+        gui_dictionaries.append(dictionary)
+
+        # print(f"{color.WARNING}{name} ({status}{color.WARNING}){color.ENDC}")
+
+gui.open_gui(gui_dictionaries)
 
 # set(target, {'1.3.6.1.2.1.1.5.0': 'S1'}, credentials)
+
+# print ("Both a and b are equal" if a == b else "a is greater than b" if a > b else "b is greater than a")
+
+
+# while True:
+#     # print(get(target, [target_oid], credentials)[target_oid]) # Simple method to do this
+
+#     result = get(target, [target_oid], credentials)
+#     for key in result:
+#         print(result[key])
+#     time.sleep(1)
+
