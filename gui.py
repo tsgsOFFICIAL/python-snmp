@@ -1,12 +1,15 @@
 import tkinter as tk
+import shared
 import snmp
 
 def toggle_state(oid, state):
     def wrapper(oid=oid, state=state):
         if state == 1:
             print("UP")
+            snmp.set(shared.target, {'1.3.6.1.2.1.1.5.0': 'UP'}, shared.credentials)
         else:
             print("DOWN")
+            snmp.set(shared.target, {'1.3.6.1.2.1.1.5.0': 'DOWN'}, shared.credentials)
     return wrapper
 
 def open_gui(dict_list):

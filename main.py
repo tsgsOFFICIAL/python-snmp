@@ -1,12 +1,9 @@
-from pysnmp import hlapi
-import time
 import requests
+import time
+import shared
 import snmp
 import gui
 
-# Variables
-target = "192.168.0.2"
-credentials = hlapi.CommunityData('GRUPPE1')
 
 # This is just an "enum" for colors in the console
 class color:
@@ -21,7 +18,7 @@ class color:
     UNDERLINE = '\033[4m'
 
 target_oid = '1.3.6.1.2.1.2.2.1.8' # Interface status
-results = snmp.get_bulk(target, [target_oid], credentials, 27)
+results = snmp.get_bulk(shared.target, [target_oid], shared.credentials, 27)
 
 gui_dictionaries = []
 
@@ -30,7 +27,7 @@ for result in results:
     for key in result:
         # print(f"Key: {key} - Value: {result[key]}")
         description_oid = f"{key[:key.rindex('.') - 1]}2{key[key.rindex('.'):len(key)]}"
-        name = snmp.get(target, [description_oid], credentials)[description_oid]
+        name = snmp.get(shared.target, [description_oid], shared.credentials)[description_oid]
         status = f"{color.OKGREEN + 'UP' if result[key] == 1 else color.FAIL + 'DOWN'}"
 
         dictionary = {
