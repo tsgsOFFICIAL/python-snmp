@@ -34,10 +34,10 @@ def open_gui():
     window.iconbitmap("logo.ico")
 
     for i in range(10):
-        window.rowconfigure(i, weight=1, minsize=25)
+        window.rowconfigure(i, weight=1)
         
         for j in range(12):
-            window.columnconfigure(j, weight=1, minsize=25)
+            window.columnconfigure(j, weight=1)
             
     for i in range(len(dict_list)):
         # int(i / 12) = row
@@ -52,8 +52,10 @@ def open_gui():
             command = toggle_state(dict_list[i]['status_oid'], dict_list[i]['status'], dict_list[i]['name'])
         )
 
-        btn.grid(row = int(i / 12), column = i % 12, padx = 5, pady = 5)
-    # for dict in dict_list:
-    #     print(dict)
+        btn.grid(row = int(i / 12), column = i % 12, padx = 5, sticky="ew")
+
+
     window.protocol("WM_DELETE_WINDOW", on_closing)
+    # window.attributes("-fullscreen", True)
+    window.state('zoomed')
     window.mainloop()
