@@ -17,11 +17,11 @@ class color:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-interface_count = 27
 if_status_oid = '1.3.6.1.2.1.2.2.1.8' # Interface status
 if_admin_status_oid = '.1.3.6.1.2.1.2.2.1.7' # Interface admin status
+if_number_oid = '1.3.6.1.2.1.2.1.0' # Interface number/count
+interface_count = snmp.get(shared.target, [if_number_oid], shared.credentials)[if_number_oid] - 1
 
-# open_gui = True
 while shared.run:
     if_status_results = snmp.get_bulk(shared.target, [if_status_oid], shared.credentials, interface_count)
 

@@ -8,9 +8,11 @@ dict_list = []
 window = ""
 
 def on_closing():
-    if messagebox.askokcancel("Quit", "Do you want to quit?"):
+    if messagebox.askokcancel("Quit", "Do you want to quit?\nCancel to reload data"):
         window.destroy()
         shared.run = False
+    else:
+        window.destroy()
 
 def get_dict_list(list):
     global dict_list
@@ -33,7 +35,7 @@ def open_gui():
     window.title("Interfaces and their status")
     window.iconbitmap("logo.ico")
 
-    for i in range(10):
+    for i in range(int(len(dict_list) + 1)):
         window.rowconfigure(i, weight=1)
         
         for j in range(12):
